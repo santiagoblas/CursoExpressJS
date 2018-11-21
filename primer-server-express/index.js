@@ -1,6 +1,18 @@
 const express = require("express");
+const morgan = require('morgan');
 const app = express();
-const morgan = require('morgan')
+
+//require de rutas
+const routes = require('./routes');
+const routesApi = require('./routes-api')
+
+//---RUTAS------------------
+app.use(routes);
+app.use('/api', routesApi);
+
+app.get("*", (req, res) => {
+    res.end("Archivo no encontrado");
+});
 
 //---SETTINGS---------------
 app.set('appName', 'Mi primer server');
@@ -11,19 +23,6 @@ app.set('view engine', 'ejs');
 app.use(morgan('dev'));
 app.use(morgan('combined'));
 app.use(morgan('short'));
-
-//---RUTAS------------------
-app.get("/", (req, res) => {
-    res.end("Hola amigos");
-});
-
-app.get("/login", (req, res) => {
-    res.end("Este es el login");
-});
-
-app.get("*", (req, res) => {
-    res.end("Archivo no encontrado");
-})
 
 app.listen(3000, function() {
     console.log("Servidor funcionando");
